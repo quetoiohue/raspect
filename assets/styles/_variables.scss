@@ -1,0 +1,95 @@
+// -----------------------------------------------------------------------------
+// This file contains all application-wide Sass variables.
+// -----------------------------------------------------------------------------
+
+/// Regular font family
+$text-font-stack: var(
+  --text-font-stack,
+  ('Open Sans', 'Arial', sans-serif)
+) !default;
+$font-family-default: $text-font-stack !default;
+
+/* Color
+-------------------------- */
+$color-white: #fff !default;
+$color-black: #000 !default;
+$color-primary: var(--color-primary, #979797) !default;
+$color-success: var(--color-success, #39d279) !default;
+$color-warning: var(--color-warning, #f5a623) !default;
+$color-danger: var(--color-danger, #ed2939) !default;
+
+$color-status-normal: #9f9f9f !default;
+$color-status-major: #f44336 !default;
+$color-status-moderate: #ffb74d !default;
+$color-status-minor: #4a90e2 !default;
+
+$color-zone-1: rgba(216, 216, 216, 0.5) !default;
+$color-zone-2: rgba(187, 187, 187, 0.8) !default;
+$color-zone-3: #797979 !default;
+$color-zone-4: #4a4a4a !default;
+$color-zone-5: #848d9c !default;
+$color-zone-hotel: #4a90e2 !default;
+
+$color-text: #4a4a4a !default;
+$color-text-primary: #9b9b9b !default;
+$color-text-secondary: var(--color-text-secondary, #a2a2a2) !default;
+$color-text-lighter: var(--color-text-lighter, #979797) !default;
+$color-text-placeholder: $color-text-lighter !default;
+$color-text-danger: rgba(232, 75, 75, 0.9) !default;
+
+$color-link: var(--color-link, #e5e5e5) !default;
+$color-link-hover: #2a80b0 !default;
+
+$border-color-base: #9b9b9b !default;
+$border-color-light: #9f9f9f !default;
+$border-radius-base: 10px !default;
+
+$background-color-base: #e5e5e5 !default;
+$background-color-white: $color-white !default;
+$background-hover: #f8f8f8 !default;
+$background-color-header: #595B5F !default;
+
+/* Font
+  -------------------------- */
+$font-size-extra-large: 20px !default;
+$font-size-large: 18px !default;
+$font-size-medium: 16px !default;
+$font-size-base: 14px !default;
+$font-size-small: 12px !default;
+$font-size-extra-small: 10px !default;
+
+$font-size-h1: floor(($font-size-base * 2.6)) !default; // ~36px
+$font-size-h2: floor(($font-size-base * 2.15)) !default; // ~30px
+$font-size-h3: ceil(($font-size-base * 1.7)) !default; // ~24px
+$font-size-h4: ceil(($font-size-base * 1.25)) !default; // ~18px
+$font-size-h5: $font-size-base !default;
+$font-size-h6: ceil(($font-size-base * 0.85)) !default; // ~12px
+
+$font-weight-primary: 600 !default;
+$font-weight-bold: bold !default;
+
+$line-height-base: 1.428571429 !default; // 20/14
+$headings-line-height: 1.1 !default;
+$line-height-computed: floor(($font-size-base * $line-height-base)) !default;
+
+/* zIndex */
+$zindex-header: 1030;
+
+/* Break-point
+-------------------------- */
+$breakpoints: (
+  xs: 576px,
+  sm: 768px,
+  md: 992px,
+  lg: 1200px,
+  xl: 1440px,
+);
+
+/* CONSTANT */
+$header-height: 60px !default;
+$toolbar-height: 55px !default;
+
+$container-width: 1120px !default;
+
+$container-padding: 40px !default;
+$header-padding: 24px !default;
