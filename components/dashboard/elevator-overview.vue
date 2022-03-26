@@ -2,20 +2,22 @@
   <el-card :class="$style.container">
     <strong slot="header">Elevator System Overview</strong>
     <div :class="$style.elevator">
-      <div>Hotel</div>
-      <div>Zone 5</div>
-      <div>Zone 4</div>
-      <div>Zone 3</div>
-      <div>Zone 2</div>
-      <div>Zone 1</div>
+      <div v-for="idx in Object.keys(ZONES).reverse()" :key="idx" :class="{ [$style.isActive]: +idx === +zone }">
+        {{ ZONES[idx].label }}
+      </div>
     </div>
   </el-card>
 </template>
 
 <script>
+import { ZONES } from '~/constants'
+
 export default {
+  props: {
+    zone: [Number, String],
+  },
   setup() {
-    return {}
+    return { ZONES }
   },
 }
 </script>
@@ -46,6 +48,10 @@ export default {
       border-bottom: 2px dashed #9f9f9f;
       color: #9f9f9f;
       padding-left: 20px;
+
+      &.isActive {
+        background-color: rgba(196, 196, 196, 0.4);
+      }
 
       &:nth-child(1) {
         height: 40px;

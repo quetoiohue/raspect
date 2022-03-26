@@ -20,6 +20,8 @@ export default {
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
   },
 
+  globalName: 'raspect',
+
   publicRuntimeConfig: {
     GOOGLE_API_KEY: process.env.GOOGLE_API_KEY,
   },

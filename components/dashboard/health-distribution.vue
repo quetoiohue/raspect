@@ -66,6 +66,7 @@
 <script>
 import { reactive, toRefs, watch } from '@nuxtjs/composition-api'
 import healthChart from '~/components/health-chart.vue'
+import { STATUSES, ZONES } from '~/constants'
 
 export default {
   components: {
@@ -77,11 +78,11 @@ export default {
   setup(props) {
     const data = reactive({
       chartData: {
-        labels: ['Major', 'Moderate', 'Minor', 'Normal'],
+        labels: Object.values(STATUSES).map((e) => e.label),
         datasets: [
           {
             data: [300, 50, 100, 200],
-            backgroundColor: ['#f44336', '#ffb74d', '#4a90e2', '#9f9f9f'],
+            backgroundColor: Object.values(STATUSES).map((e) => e.color),
             hoverOffset: 4,
           },
         ],
@@ -98,30 +99,16 @@ export default {
 
     const changeConfig = () => {
       data.chartData = {
-        labels: ['Zone 1', 'Zone 2', 'Zone 3', 'Zone 4', 'Zone 5', 'Hotel'],
+        labels: Object.values(ZONES).map((e) => e.label),
         datasets: [
           {
             data: [300, 50, 100, 200, 60, 80],
-            backgroundColor: [
-              'rgba(216, 216, 216, 0.5)',
-              'rgba(187, 187, 187, 0.8)',
-              '#797979',
-              '#4a4a4a',
-              '#848d9c',
-              '#4a90e2',
-            ],
+            backgroundColor: Object.values(ZONES).map((e) => e.color),
             hoverOffset: 4,
           },
         ],
       }
-      data.legends = [
-        { color: 'rgba(216, 216, 216, 0.5)', label: 'Zone 1' },
-        { color: 'rgba(187, 187, 187, 0.8)', label: 'Zone 2' },
-        { color: '#797979', label: 'Zone 3' },
-        { color: '#4a4a4a', label: 'Zone 4' },
-        { color: '#848d9c', label: 'Zone 5' },
-        { color: '#4a90e2', label: 'Hotel' },
-      ]
+      data.legends = Object.values(ZONES)
     }
 
     watch(

@@ -195,6 +195,9 @@ html,
         height: auto;
         padding: 7px 20px;
         line-height: $line-height-base;
+        &.selected {
+          color: $color-danger;
+        }
       }
     }
   }

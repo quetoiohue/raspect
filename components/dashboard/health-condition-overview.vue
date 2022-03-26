@@ -33,14 +33,18 @@
           </template>
         </div>
       </div>
-      <div :class="$style.tableBody">
-        <div v-for="i in 50" :key="i" :class="$style.tableRow">
+      <div ref="table" :class="$style.tableBody">
+        <div v-for="i in 50" :key="i" :class="$style.tableRow" @click="onClickItem(i)">
           <div :class="$style.tableBodyCell">Elevator 001</div>
           <div :class="$style.tableBodyCell">Zone 1</div>
           <template v-if="isDate">
             <div :class="[$style.tableBodyCell, { [$style.datePeriodCell]: isDate }]">
-              <div v-for="id in selectedDates.length" :key="id" :class="$style.dateBlock" />
-              <line-bar :class="$style.lineBar" />
+              <div
+                v-for="id in selectedDates.length"
+                :key="id"
+                :class="[$style.dateBlock, { [$style.lastBlock]: id === selectedDates.length }]"
+              />
+              <line-bar :class="$style.lineBar" :indicator-visible="true" />
             </div>
           </template>
           <template v-else>
@@ -57,14 +61,18 @@
   </el-card>
 </template>
 <script>
-import { reactive, toRefs } from '@vue/composition-api'
+import { getCurrentInstance, reactive, toRefs, useContext, useCssModule, watch } from '@nuxtjs/composition-api'
 import lineBar from './line-bar.vue'
+
 export default {
   components: { lineBar },
   props: {
     isDate: Boolean,
   },
-  setup() {
+  setup(props) {
+    const { route, next } = useContext()
+    const style = useCssModule()
+    const vm = getCurrentInstance().proxy
     const data = reactive({
       selectedDates: [
         { year: 2021, month: 'Jun' },
@@ -79,17 +87,42 @@ export default {
         { year: 2022, month: 'Mar' },
         { year: 2022, month: 'Apr' },
         { year: 2022, month: 'May' },
-        { year: 2022, month: 'Jun ' },
       ],
     })
 
+    const onClickItem = (id) => {
+      const path = `${route.value.path}/${id}`
+      next(path)
+    }
+
+    watch(
+      () => props.isDate,
+      (val) => {
+        if (vm.$refs.table && val) {
+          if (!val) return document.documentElement.style.setProperty('--elevator-row-spacing', 0)
+
+          setTimeout(() => {
+            const $row = vm.$refs.table.querySelector('.' + style.datePeriodCell)
+            const spacing = $row.getBoundingClientRect().width / data.selectedDates.length - 5 + 'px'
+
+            document.documentElement.style.setProperty('--elevator-row-spacing', spacing)
+          }, 300)
+        }
+      }
+    )
+
     return {
       ...toRefs(data),
+      onClickItem,
     }
   },
 }
 </script>
 <style lang="scss" module>
+:root {
+  --elevator-row-spacing: 0;
+}
+
 .container {
   margin-top: 20px;
 
@@ -150,13 +183,15 @@ export default {
           display: flex;
           flex-wrap: nowrap;
           position: relative;
+          margin-right: var(--elevator-row-spacing);
+
           .dateBlock {
             border-left: 1px dashed $color-text;
             flex: 1;
             height: 100%;
 
-            &:last-child {
-              border-right: 1px dashed $color-text;
+            &.lastBlock {
+              flex: 0;
             }
           }
           .lineBar {

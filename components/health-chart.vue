@@ -27,9 +27,6 @@ export default {
       default: () => [],
     },
   },
-  setup(props) {
-    console.log('🚀 ~ file: health-chart.vue ~ line 31 ~ setup ~ props', props)
-  },
 }
 </script>
 <style lang="scss" module>

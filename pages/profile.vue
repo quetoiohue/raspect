@@ -55,10 +55,8 @@
 import isEqual from 'lodash/isEqual'
 import cloneDeep from 'lodash/cloneDeep'
 import { getCurrentInstance, onMounted, reactive, toRefs } from '@vue/composition-api'
-import editable from '~/components/editable.vue'
 
 export default {
-  components: { editable },
   layout: 'base',
   setup() {
     const vm = getCurrentInstance().proxy
@@ -80,12 +78,6 @@ export default {
     })
 
     const saveUserForm = () => {
-      console.log(
-        '🚀 ~ file: profile.vue ~ line 56 ~ saveUserForm',
-        userForm,
-        data.originalUserForm,
-        isEqual(data.originalUserForm, userForm)
-      )
       if (!isEqual(data.originalUserForm, userForm)) {
         vm.$confirm('Changes not save yet. Leave without save?', {
           confirmButtonText: 'Save',
@@ -120,17 +112,14 @@ export default {
         return (data.isEditingPass = true)
       }
 
-      console.log('🚀 ~ file: profile.vue ~ line 56 ~ saveUserForm', passForm, data.originalPassForm)
       data.isEditingPass = false
     }
 
     const cancelPassForm = () => {
-      console.log('🚀 ~ file: profile.vue ~ line 56 ~ saveUserForm', passForm, data.originalPassForm)
       data.isEditingPass = false
     }
 
     onMounted(() => {
-      console.log('🚀 ~ file: profile.vue ~ line 56 ~ onMounted ~ userForm', { userForm, passForm })
       data.originalUserForm = cloneDeep(userForm)
       data.originalPassForm = cloneDeep(passForm)
     })
