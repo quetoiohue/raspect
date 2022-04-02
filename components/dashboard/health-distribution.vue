@@ -97,7 +97,7 @@ export default {
       legends: [],
     })
 
-    const changeConfig = () => {
+    const drawZoneChart = () => {
       data.chartData = {
         labels: Object.values(ZONES).map((e) => e.label),
         datasets: [
@@ -111,16 +111,30 @@ export default {
       data.legends = Object.values(ZONES)
     }
 
+    const drawStatusChart = () => {
+      data.chartData = {
+        labels: Object.values(STATUSES).map((e) => e.label),
+        datasets: [
+          {
+            data: [300, 50, 100, 200],
+            backgroundColor: Object.values(STATUSES).map((e) => e.color),
+            hoverOffset: 4,
+          },
+        ],
+      }
+      data.legends = []
+    }
+
     watch(
       () => props.showZoneChart,
       () => {
-        changeConfig()
+        props.showZoneChart ? drawZoneChart() : drawStatusChart()
       }
     )
 
     return {
       ...toRefs(data),
-      changeConfig,
+      drawZoneChart,
     }
   },
 }

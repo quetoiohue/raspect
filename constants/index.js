@@ -36,3 +36,11 @@ export const ZONES = Object.freeze({
   5: { color: '#848d9c', label: 'Zone 5' },
   6: { color: '#4a90e2', label: 'Hotel' },
 })
+
+export const UNIT_TYPES = {
+  FT: 'ft',
+  RPM: 'rpm',
+  BSF: 'bsf',
+  BPFO: 'bpfo',
+  BPFI: 'bpfi',
+}

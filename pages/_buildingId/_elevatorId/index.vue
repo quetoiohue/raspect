@@ -26,9 +26,11 @@
                   Health Status: Moderate <br />
                   since 13:24 16/06/2021
                 </div>
-                <span :class="$style.infoIcon">
-                  <icons name="ic-info" />
-                </span>
+                <nuxt-link :to="`${$route.path}/metrics`">
+                  <span :class="$style.infoIcon">
+                    <icons name="ic-info" />
+                  </span>
+                </nuxt-link>
               </el-tooltip>
             </div>
           </div>

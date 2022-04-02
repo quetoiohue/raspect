@@ -5,7 +5,9 @@
         :key="i"
         :class="[$style.indicator, { [$style.isActive]: +idx === currentStatus }]"
         :style="indicatorStyle(idx)"
-      />
+      >
+        <span v-if="showLabel" :class="$style.label">{{ STATUSES[idx].label }}</span>
+      </div>
       <div v-if="i < statusIndexs.length - 1" :key="i + idx" :class="$style.line" :style="lineStyle(idx)" />
     </template>
   </div>
@@ -19,6 +21,11 @@ export default {
       type: Number,
       default: 2,
     },
+    parentBgColor: {
+      type: String,
+      default: () => '#fff',
+    },
+    showLabel: Boolean,
   },
   setup(props) {
     const statusIndexs = Object.keys(STATUSES).reverse()
@@ -29,7 +36,7 @@ export default {
 
       if (+idx === props.currentStatus) {
         return {
-          background: `repeating-linear-gradient(to right, #fff, #fff 5%, transparent 5%, transparent 10%), ${rangeColor}`,
+          background: `repeating-linear-gradient(to right, ${props.parentBgColor}, ${props.parentBgColor} 5%, transparent 5%, transparent 10%), ${rangeColor}`,
         }
       } else {
         return {
@@ -45,7 +52,7 @@ export default {
       }
     }
 
-    return { statusIndexs, lineStyle, indicatorStyle }
+    return { STATUSES, statusIndexs, lineStyle, indicatorStyle }
   },
 }
 </script>
@@ -58,9 +65,19 @@ export default {
     width: 16px;
     border-radius: 50%;
     flex: none;
+    position: relative;
+
+    .label {
+      position: absolute;
+      top: calc(100% + 12px);
+      left: 50%;
+      transform: translateX(-50%);
+      font-weight: $font-weight-primary;
+      font-size: 10px;
+      color: $color-white;
+    }
 
     &.isActive {
-      position: relative;
       z-index: 1;
       &:before {
         content: '';

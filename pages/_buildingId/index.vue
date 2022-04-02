@@ -14,8 +14,8 @@
     </el-col>
     <el-col :span="18">
       <filter-bar :filter="filter" @set-filter="setFilter" />
-      <elevator-distribution v-if="isDateNav" />
-      <health-distribution v-else :show-zone-chart="showZoneChart" />
+      <elevator-distribution v-if="isDateNav" key="elevator-distribution" />
+      <health-distribution v-else key="health-distribution" :show-zone-chart="showZoneChart" />
       <health-condition-overview :is-date="isDateNav" />
     </el-col>
   </el-row>

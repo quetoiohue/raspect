@@ -204,6 +204,14 @@ html,
 
   .el-button {
     &--default {
+      &.is-plain {
+        border: 1px solid #cacdd5;
+        &:hover,
+        &:focus {
+          color: $color-text;
+          border-color: #cacdd5;
+        }
+      }
       &:hover,
       &:focus {
         color: $color-text;
@@ -727,7 +735,9 @@ html,
 .el-date-table {
   td {
     &.start-date,
-    &.end-date {
+    &.end-date,
+    &.current:not(.disabled),
+    &.today {
       span {
         background-color: $color-text-danger;
       }
@@ -744,5 +754,41 @@ html,
     &.available:hover {
       color: $color-text-danger;
     }
+  }
+}
+
+.el-picker-panel {
+  &__icon-btn {
+    &:hover {
+      color: $color-text-danger;
+    }
+  }
+  .el-date-picker__header {
+    &-label {
+      &:hover {
+        color: $color-text-danger;
+      }
+    }
+  }
+  .el-month-table {
+    td {
+      .cell {
+        &:hover {
+          color: $color-text-danger;
+        }
+      }
+      &.current,
+      &.today {
+        &:not(.disabled) {
+          .cell {
+            color: $color-text-danger;
+          }
+        }
+      }
+    }
+  }
+
+  .time-select-item.selected:not(.disabled) {
+    color: $color-text-danger;
   }
 }
