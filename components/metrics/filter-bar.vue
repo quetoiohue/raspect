@@ -2,10 +2,11 @@
   <div :class="$style.container">
     <strong :class="$style.index">{{ index + 1 }}</strong>
     <el-select :value="filter.elevator" placeholder="All Elevator" @change="setFilter('elevator', $event)">
-      <el-option v-for="item in elevatorOptions" :key="item.value" :label="item.label" :value="item.value"> </el-option>
+      <el-option v-for="item in ELEVATOR_OPTIONS" :key="item.value" :label="item.label" :value="item.value">
+      </el-option>
     </el-select>
     <el-select :value="filter.bearing" placeholder="All Bearing" @change="setFilter('bearing', $event)">
-      <el-option v-for="item in bearingOptions" :key="item.value" :label="item.label" :value="item.value"> </el-option>
+      <el-option v-for="item in BEARING_OPTIONS" :key="item.value" :label="item.label" :value="item.value"> </el-option>
     </el-select>
     <el-date-picker
       :value="filter.date"
@@ -47,6 +48,7 @@
 </template>
 <script>
 import { getCurrentInstance, reactive, toRefs } from '@vue/composition-api'
+import { BEARING_OPTIONS, ELEVATOR_OPTIONS } from '~/constants'
 export default {
   props: {
     filter: Object,
@@ -58,18 +60,6 @@ export default {
   },
   setup() {
     const vm = getCurrentInstance().proxy
-    const elevatorOptions = [
-      {
-        value: 1,
-        label: 'Elevator 001',
-      },
-    ]
-    const bearingOptions = [
-      {
-        value: 1,
-        label: 'Bearing 1',
-      },
-    ]
 
     const data = reactive({})
 
@@ -80,8 +70,8 @@ export default {
 
     return {
       ...toRefs(data),
-      elevatorOptions,
-      bearingOptions,
+      ELEVATOR_OPTIONS,
+      BEARING_OPTIONS,
       setFilter,
     }
   },

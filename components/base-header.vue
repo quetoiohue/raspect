@@ -5,7 +5,12 @@
         <img :class="$style.logo" src="~/static/icons/icon.svg" />
       </span>
       <span>
-        <el-input :class="$style.searchBar" placeholder="Building Name / Building ID" prefix-icon="el-icon-search" />
+        <el-input
+          v-if="showSearchBar"
+          :class="$style.searchBar"
+          placeholder="Building Name / Building ID"
+          prefix-icon="el-icon-search"
+        />
       </span>
     </div>
 
@@ -46,15 +51,29 @@
 </template>
 
 <script>
-import { getCurrentInstance } from '@vue/composition-api'
+import { getCurrentInstance, reactive, toRefs, watch } from '@vue/composition-api'
+import { useContext } from '@nuxtjs/composition-api'
 
 export default {
   setup() {
     const vm = getCurrentInstance().proxy
+    const { route } = useContext()
+    const data = reactive({
+      showSearchBar: false,
+    })
 
     const closePopup = () => vm.$refs.menu && vm.$refs.menu.doClose()
 
+    watch(
+      () => route.value.name,
+      (val) => {
+        const showedSearchRoutes = ['index']
+        data.showSearchBar = showedSearchRoutes.includes(val)
+      }
+    )
+
     return {
+      ...toRefs(data),
       closePopup,
     }
   },

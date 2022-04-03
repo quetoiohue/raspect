@@ -44,3 +44,98 @@ export const UNIT_TYPES = {
   BPFO: 'bpfo',
   BPFI: 'bpfi',
 }
+
+export const ZONE_OPTIONS = [
+  {
+    value: 0,
+    label: 'All Zones',
+  },
+  {
+    value: 1,
+    label: 'Zone 1',
+  },
+  {
+    value: 2,
+    label: 'Zone 2',
+  },
+  {
+    value: 3,
+    label: 'Zone 3',
+  },
+  {
+    value: 4,
+    label: 'Zone 4',
+  },
+  {
+    value: 5,
+    label: 'Zone 5',
+  },
+  {
+    value: 6,
+    label: 'Hotel',
+  },
+]
+
+export const ELEVATOR_OPTIONS = [
+  {
+    value: 0,
+    label: 'All elevators',
+  },
+  {
+    value: 1,
+    label: 'Elevator 001',
+  },
+  {
+    value: 2,
+    label: 'Elevator 002',
+  },
+]
+
+export const SENSOR_OPTIONS = [
+  {
+    value: 0,
+    label: 'All sensors',
+  },
+  {
+    value: 1,
+    label: 'Sensor 0001',
+  },
+  {
+    value: 2,
+    label: 'Sensor 0002',
+  },
+]
+
+export const BEARING_OPTIONS = [
+  {
+    value: 0,
+    label: 'All bearings',
+  },
+  {
+    value: 1,
+    label: 'Bearing 1',
+  },
+]
+
+export const STATUS_OPTIONS = [
+  {
+    value: 0,
+    label: 'All Statuses',
+  },
+  {
+    value: 1,
+    label: 'Major Status',
+  },
+  {
+    value: 2,
+    label: 'Moderate Status',
+  },
+  {
+    value: 3,
+    label: 'Minor Status',
+  },
+  {
+    value: 4,
+    label: 'Normal Status',
+  },
+]

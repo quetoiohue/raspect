@@ -106,6 +106,66 @@ export default {
             },
           },
         },
+        tooltips: {
+          // Disable the on-canvas tooltip
+          enabled: false,
+
+          custom(tooltipModel) {
+            // Tooltip Element
+            let tooltipEl = document.getElementById('chartjs-tooltip')
+
+            // Create element on first render
+            if (!tooltipEl) {
+              tooltipEl = document.createElement('div')
+              tooltipEl.id = 'chartjs-tooltip'
+              tooltipEl.innerHTML = '<table></table>'
+              document.body.appendChild(tooltipEl)
+            }
+
+            // Hide if no tooltip
+            if (tooltipModel.opacity === 0) {
+              tooltipEl.style.opacity = 0
+              return
+            }
+
+            // Set caret Position
+            tooltipEl.classList.remove('above', 'below', 'no-transform')
+            if (tooltipModel.yAlign) {
+              tooltipEl.classList.add(tooltipModel.yAlign)
+            } else {
+              tooltipEl.classList.add('no-transform')
+            }
+
+            const dataset = tooltipModel.dataPoints[0]
+            // Set Text
+            if (dataset) {
+              const { xLabel, yLabel } = dataset
+              let innerHtml = '<thead>'
+              innerHtml += '<tr><td>' + 'Frequency: ' + xLabel + '</td></tr>'
+              innerHtml += '</thead><tbody>'
+              innerHtml +=
+                '<tr><td>' + (isAcceleration(xLabel) ? 'Acceleration: ' : 'Velocity: ') + yLabel + '</td></tr>'
+              innerHtml += '</tbody>'
+
+              const tableRoot = tooltipEl.querySelector('table')
+              tableRoot.innerHTML = innerHtml
+            }
+
+            // `this` will be the overall tooltip
+            const position = this._chart.canvas.getBoundingClientRect()
+
+            // Display, position, and set styles for font
+            tooltipEl.style.opacity = 1
+            tooltipEl.style.position = 'absolute'
+            tooltipEl.style.left = position.left + window.pageXOffset + tooltipModel.caretX + 'px'
+            tooltipEl.style.top = position.top + window.pageYOffset + tooltipModel.caretY + 'px'
+            tooltipEl.style.fontFamily = tooltipModel._bodyFontFamily
+            tooltipEl.style.fontSize = tooltipModel.bodyFontSize + 'px'
+            tooltipEl.style.fontStyle = tooltipModel._bodyFontStyle
+            tooltipEl.style.padding = tooltipModel.yPadding + 'px ' + tooltipModel.xPadding + 'px'
+            tooltipEl.style.pointerEvents = 'none'
+          },
+        },
         scales: {
           yAxes: [
             {
@@ -145,7 +205,7 @@ export default {
                   const log10Value = Math.log10(+val)
                   const pow10Count = Math.pow(10, countLog10)
                   if (log10Value > countLog10 || index === values.length - 1) {
-                    label = pow10Count > 1000 ? pow10Count / 1000 + 'k' : pow10Count
+                    label = isAcceleration(pow10Count) ? pow10Count / 1000 + 'k' : pow10Count
                     countLog10 = Math.ceil(log10Value)
                   }
 
@@ -171,14 +231,25 @@ export default {
       chartConfig.data.datasets = [
         {
           label: 'Velocity',
-          data: _metrics.map((l) => l.velocity),
+          data: _metrics.map((_l) => _l.velocity),
           borderColor: 'grey',
           fill: false,
           yAxisID: 'y',
+          pointRadius: 0,
         },
+        // {
+        //   label: 'Acceleration',
+        //   data: _metrics.filter((l) => l.frequency >= 1000).map((_l) => _l.velocity),
+        //   borderColor: 'rgba(216, 216, 216, 0.8)',
+        //   fill: false,
+        //   yAxisID: 'y1',
+        //   pointRadius: 0,
+        // },
       ]
       vm.$refs.chart && vm.$refs.chart.renderChart(chartConfig.data, chartConfig.options)
     }
+
+    const isAcceleration = (value) => value >= 1000
 
     onMounted(() => {
       updateChart(props.metrics)
@@ -216,6 +287,14 @@ export default {
   }
   .rightYaxis {
     right: 0;
+  }
+}
+:global {
+  #chartjs-tooltip {
+    background: #444;
+    color: #fff;
+    border-radius: 4px;
+    font-weight: 400;
   }
 }
 </style>

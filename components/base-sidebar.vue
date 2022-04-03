@@ -25,13 +25,11 @@
 
       <el-submenu index="setting">
         <template slot="title">
-          <icons name="ic-setting" :is-active="currentIndex in ['setting', 'setting-alert', 'setting-contact']" />
+          <icons name="ic-setting" :is-active="currentIndex === 'setting'" />
           <span slot="title" class="menuitem-name">Setting</span>
         </template>
         <el-menu-item-group>
           <el-menu-item index="setting" :route="{ name: 'setting' }">Sensor Setting</el-menu-item>
-          <el-menu-item index="setting-alert" :route="{ name: 'setting-alert' }">Alert Notification</el-menu-item>
-          <el-menu-item index="setting-contact" :route="{ name: 'setting-contact' }">Notification Contact</el-menu-item>
         </el-menu-item-group>
       </el-submenu>
     </el-menu>

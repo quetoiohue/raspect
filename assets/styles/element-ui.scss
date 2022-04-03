@@ -558,14 +558,19 @@ html,
   }
 
   .el-checkbox {
-    .el-checkbox__input.is-checked + .el-checkbox__label {
-      color: $color-text;
-    }
-    &.el-checkbox--lighter {
-      font-weight: normal;
-      &,
-      .el-checkbox__input.is-checked + .el-checkbox__label {
-        color: rgba(85, 85, 85, 0.5);
+    .el-checkbox__input {
+      &.is-checked,
+      &.is-indeterminate {
+        color: $color-text;
+        > .el-checkbox__inner {
+          background-color: $color-text-danger;
+          border-color: $color-text-danger;
+        }
+      }
+      > .el-checkbox__inner {
+        &:hover {
+          border-color: $color-text-danger;
+        }
       }
     }
   }
@@ -740,6 +745,7 @@ html,
     &.today {
       span {
         background-color: $color-text-danger;
+        color: $color-white;
       }
     }
     &.in-range {
