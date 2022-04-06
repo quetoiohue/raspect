@@ -11,34 +11,36 @@
           <el-col v-for="(_, type) in mockData" :key="type" :span="8">
             <div :class="$style.listTitle">{{ getTitle(type) }}</div>
             <collapse-items v-for="group in mockData[type].groups" :key="group.subTitle" :sub-title="group.subTitle">
-              <li
+              <nuxt-link
                 v-for="(item, index) in group.items"
                 :key="group.subTitle + index"
-                :class="[$style.listItem, $style[type], 'list-item']"
+                :to="`/setting/${index}?type=${type === 'elevator' ? 'elevator' : 'sensor'}`"
               >
-                <template v-if="type === 'location'">
-                  <span :class="$style.icon"><icons name="ic-layer" /></span>
-                  <span :class="$style.name">{{ item.name }}</span>
-                  <chip :class="$style.chip" :label="group.items.length + ' elevators'" color="#4A90E2" />
-                </template>
-                <template v-else-if="type === 'elevator'">
-                  <span :class="$style.icon"><icons name="ic-elevator" /></span>
-                  <span :class="$style.name">{{ item.name }}</span>
-                  <chip :class="$style.chip" :label="group.items.length + ' sensors'" color="#4A90E2" />
-                </template>
-                <template v-else>
-                  <span :class="$style.icon"><icons name="ic-sensor-dark" /></span>
-                  <span :class="$style.name">{{ item.name }}</span>
-                  <chip
-                    :class="$style.chip"
-                    :label="item.status ? 'on' : 'off'"
-                    :color="item.status ? '#26CB72' : 'rgba(0, 0, 0, 0.25)'"
-                  />
-                  <span :class="$style.type">
-                    {{ item.type }}
-                  </span>
-                </template>
-              </li>
+                <li :class="[$style.listItem, $style[type], 'list-item']">
+                  <template v-if="type === 'location'">
+                    <span :class="$style.icon"><icons name="ic-layer" /></span>
+                    <span :class="$style.name">{{ item.name }}</span>
+                    <chip :class="$style.chip" :label="group.items.length + ' elevators'" color="#4A90E2" />
+                  </template>
+                  <template v-else-if="type === 'elevator'">
+                    <span :class="$style.icon"><icons name="ic-elevator" /></span>
+                    <span :class="$style.name">{{ item.name }}</span>
+                    <chip :class="$style.chip" :label="group.items.length + ' sensors'" color="#4A90E2" />
+                  </template>
+                  <template v-else>
+                    <span :class="$style.icon"><icons name="ic-sensor-dark" /></span>
+                    <span :class="$style.name">{{ item.name }}</span>
+                    <chip
+                      :class="$style.chip"
+                      :label="item.status ? 'on' : 'off'"
+                      :color="item.status ? '#26CB72' : 'rgba(0, 0, 0, 0.25)'"
+                    />
+                    <span :class="$style.type">
+                      {{ item.type }}
+                    </span>
+                  </template>
+                </li>
+              </nuxt-link>
             </collapse-items>
           </el-col>
         </el-row>
@@ -209,6 +211,7 @@ export default {
       font-size: $font-size-small;
       position: absolute;
       bottom: 4px;
+      color: $border-color-light;
     }
   }
 }

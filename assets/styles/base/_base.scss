@@ -4,7 +4,7 @@
 html,
 body {
   position: relative;
-  background-color: #E5E5E5;
+  background-color: #e5e5e5;
 }
 
 body {
@@ -57,4 +57,9 @@ img {
 
 small {
   font-size: $font-size-small;
+}
+
+svg {
+  display: inline-block;
+  vertical-align: middle;
 }

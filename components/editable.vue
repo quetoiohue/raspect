@@ -1,7 +1,6 @@
 <template>
   <div class="el-input" @click="onDbClick">
     <input
-      v-bind="$attrs"
       type="text"
       autocomplete="off"
       class="el-input__inner"
@@ -63,9 +62,10 @@ export default {
 
     watch(
       () => props.isEditing,
-      () => {
-        data.isEditable = props.isEditing
-      }
+      (value) => {
+        data.isEditable = value
+      },
+      { immediate: true }
     )
 
     return {
