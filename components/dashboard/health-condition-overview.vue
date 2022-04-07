@@ -61,20 +61,41 @@
   </el-card>
 </template>
 <script>
-import { getCurrentInstance, reactive, toRefs, useContext, useCssModule, watch } from '@nuxtjs/composition-api'
+import {
+  computed,
+  getCurrentInstance,
+  reactive,
+  toRefs,
+  useContext,
+  useCssModule,
+  watch,
+} from '@nuxtjs/composition-api'
 import lineBar from './line-bar.vue'
+import { NAV_INDEXS } from '~/constants'
 
 export default {
   components: { lineBar },
-  props: {
-    isDate: Boolean,
-  },
-  setup(props) {
-    const { route, next } = useContext()
+  setup() {
+    const { store, route, next } = useContext()
     const style = useCssModule()
     const vm = getCurrentInstance().proxy
-    const data = reactive({
-      selectedDates: [
+    const PERIODS = {
+      [NAV_INDEXS.WEEKLY]: [
+        { year: '', month: '22/04' },
+        { year: '', month: '23/04' },
+        { year: '', month: '24/04' },
+        { year: '', month: '25/04' },
+        { year: '', month: '26/04' },
+        { year: '', month: '27/04' },
+        { year: '', month: '28/04' },
+      ],
+      [NAV_INDEXS.MONTHLY]: [
+        { year: '', month: '01/04' },
+        { year: '', month: '08/04' },
+        { year: '', month: '15/04' },
+        { year: '', month: '22/04' },
+      ],
+      [NAV_INDEXS.YEARLY]: [
         { year: 2021, month: 'Jun' },
         { year: 2021, month: 'Jul' },
         { year: 2021, month: 'Aug' },
@@ -88,6 +109,25 @@ export default {
         { year: 2022, month: 'Apr' },
         { year: 2022, month: 'May' },
       ],
+      [NAV_INDEXS.DATE]: [
+        { year: 2021, month: 'Jun' },
+        { year: 2021, month: 'Jul' },
+        { year: 2021, month: 'Aug' },
+        { year: 2021, month: 'Sep' },
+        { year: 2021, month: 'Oct' },
+        { year: 2021, month: 'Nov' },
+        { year: 2021, month: 'Dec' },
+        { year: 2022, month: 'Jan' },
+        { year: 2022, month: 'Feb' },
+        { year: 2022, month: 'Mar' },
+        { year: 2022, month: 'Apr' },
+        { year: 2022, month: 'May' },
+      ],
+    }
+    const data = reactive({
+      isDate: computed(() => store.state.menu.currentNav !== NAV_INDEXS.TODAY),
+      currentNav: computed(() => store.state.menu.currentNav),
+      selectedDates: computed(() => PERIODS[data.currentNav]),
     })
 
     const onClickItem = (id) => {
@@ -96,9 +136,9 @@ export default {
     }
 
     watch(
-      () => props.isDate,
+      () => data.currentNav,
       (val) => {
-        if (vm.$refs.table && val) {
+        if (vm.$refs.table && val !== NAV_INDEXS.TODAY) {
           if (!val) return document.documentElement.style.setProperty('--elevator-row-spacing', 0)
 
           setTimeout(() => {

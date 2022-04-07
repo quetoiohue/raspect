@@ -16,7 +16,7 @@
       <filter-bar :filter="filter" @set-filter="setFilter" />
       <elevator-distribution v-if="isDateNav" key="elevator-distribution" />
       <health-distribution v-else key="health-distribution" :show-zone-chart="showZoneChart" />
-      <health-condition-overview :is-date="isDateNav" />
+      <health-condition-overview />
     </el-col>
   </el-row>
 </template>
@@ -44,7 +44,7 @@ export default defineComponent({
   setup() {
     const { store } = useContext()
     const data = reactive({
-      isDateNav: computed(() => store.state.menu.currentNav === NAV_INDEXS.DATE),
+      isDateNav: computed(() => store.state.menu.currentNav !== NAV_INDEXS.TODAY),
       filter: {
         zone: '',
         status: '',

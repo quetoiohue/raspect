@@ -120,7 +120,7 @@ export const BEARING_OPTIONS = [
 export const STATUS_OPTIONS = [
   {
     value: 0,
-    label: 'All Statuses',
+    label: 'All Health Statuses',
   },
   {
     value: 1,

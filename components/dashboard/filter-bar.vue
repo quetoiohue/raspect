@@ -1,7 +1,7 @@
 <template>
   <div :class="$style.container">
     <strong>Filter</strong>
-    <el-select :value="filter.zone" placeholder="All Zone" @change="setFilter('zone', $event)">
+    <el-select :value="filter.zone" placeholder="All Zones" @change="setFilter('zone', $event)">
       <el-option v-for="item in ZONE_OPTIONS" :key="item.value" :label="item.label" :value="item.value"> </el-option>
     </el-select>
     <el-select :value="filter.status" placeholder="All Health Status" @change="setFilter('status', $event)">

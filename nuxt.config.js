@@ -46,6 +46,7 @@ export default {
     '@nuxtjs/style-resources',
     '@nuxtjs/composition-api/module',
     '@nuxtjs/svg',
+    '@nuxtjs/moment',
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
@@ -56,6 +57,10 @@ export default {
     '@nuxtjs/pwa',
     'portal-vue/nuxt',
   ],
+
+  moment: {
+    timezone: true,
+  },
 
   svg: {
     vueSvgLoader: {

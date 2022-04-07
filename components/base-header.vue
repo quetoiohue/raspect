@@ -8,7 +8,7 @@
         <el-input
           v-if="showSearchBar"
           :class="$style.searchBar"
-          placeholder="Building Name / Building ID"
+          :placeholder="placeholder"
           prefix-icon="el-icon-search"
         />
       </span>
@@ -51,26 +51,25 @@
 </template>
 
 <script>
-import { getCurrentInstance, reactive, toRefs, watch } from '@vue/composition-api'
+import { computed, getCurrentInstance, reactive, toRefs } from '@vue/composition-api'
 import { useContext } from '@nuxtjs/composition-api'
 
 export default {
   setup() {
     const vm = getCurrentInstance().proxy
     const { route } = useContext()
+    const SHOWED_SEARCH_ROUTES = ['index', 'buildingId']
+    const PLACEHOLDERS = {
+      index: 'Building Name / Building ID',
+      buildingId: 'Find elevator',
+    }
+
     const data = reactive({
-      showSearchBar: false,
+      showSearchBar: computed(() => SHOWED_SEARCH_ROUTES.includes(route.value.name)),
+      placeholder: computed(() => PLACEHOLDERS[route.value.name]),
     })
 
     const closePopup = () => vm.$refs.menu && vm.$refs.menu.doClose()
-
-    watch(
-      () => route.value.name,
-      (val) => {
-        const showedSearchRoutes = ['index']
-        data.showSearchBar = showedSearchRoutes.includes(val)
-      }
-    )
 
     return {
       ...toRefs(data),

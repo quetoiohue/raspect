@@ -33,9 +33,11 @@
         <span :class="$style.today">Today</span>
         <span :class="$style.date">1 June 2021 12:20:00 , Tuesday </span>
         <span @click="showDrawer = true">
-          <el-badge :value="3" class="item">
-            <i class="el-icon-message-solid" />
-          </el-badge>
+          <el-tooltip class="item" effect="dark" content="Alert Notification" placement="bottom">
+            <el-badge :value="3" class="item">
+              <i class="el-icon-message-solid" />
+            </el-badge>
+          </el-tooltip>
         </span>
       </div>
     </portal-target>

@@ -54,57 +54,39 @@
 <script>
 import isEqual from 'lodash/isEqual'
 import cloneDeep from 'lodash/cloneDeep'
-import { getCurrentInstance, onMounted, reactive, toRefs } from '@vue/composition-api'
+import { getCurrentInstance, onMounted, reactive, toRefs, watch } from '@vue/composition-api'
 
 export default {
+  beforeRouteLeave(to, from, next) {
+    if (this.isChangedData) {
+      this.$showConfirmBox({ cancel: next, opts: { showMessage: false } })
+    } else {
+      next()
+    }
+  },
   layout: 'base',
   setup() {
     const vm = getCurrentInstance().proxy
-    const userForm = reactive({
-      username: 'Quang Tran',
-      email: 'admin@gmail.com',
-      tel: '123-123-123',
-    })
-    const passForm = reactive({
-      oldPassword: '',
-      newPassword: '',
-      confirmPassword: '',
-    })
     const data = reactive({
       isEditingUser: false,
       isEditingPass: false,
       originalUserForm: null,
       originalPassForm: null,
+      isChangedData: false,
+      passForm: {
+        oldPassword: '',
+        newPassword: '',
+        confirmPassword: '',
+      },
+      userForm: {
+        username: 'Quang Tran',
+        email: 'admin@gmail.com',
+        tel: '123-123-123',
+      },
     })
 
     const saveUserForm = () => {
-      if (!isEqual(data.originalUserForm, userForm)) {
-        vm.$confirm('Changes not save yet. Leave without save?', {
-          confirmButtonText: 'Save',
-          cancelButtonText: 'Don’t save',
-          cancelButtonClass: 'cancel-btn',
-          confirmButtonClass: 'confirm-btn',
-          type: 'error',
-          center: true,
-        })
-          .then(() => {
-            vm.$message({
-              type: 'success',
-              message: 'Update completed',
-            })
-          })
-          .catch(() => {
-            vm.$message({
-              type: 'info',
-              message: 'Update canceled',
-            })
-          })
-          .finally(() => {
-            data.isEditingUser = false
-          })
-      } else {
-        data.isEditingUser = false
-      }
+      data.isEditingUser = false
     }
 
     const savePassForm = () => {
@@ -116,18 +98,30 @@ export default {
     }
 
     const cancelPassForm = () => {
-      data.isEditingPass = false
+      if (!isEqual(data.originalPassForm, data.passForm)) {
+        vm.$showConfirmBox({
+          cancel: () => (data.passForm = data.originalPassForm),
+          final: () => (data.isEditingPass = false),
+        })
+      } else {
+        data.isEditingPass = false
+      }
     }
 
+    watch(
+      () => [isEqual(data.originalUserForm, data.userForm), isEqual(data.originalPassForm, data.passForm)],
+      ([a, b]) => {
+        data.isChangedData = a || b
+      }
+    )
+
     onMounted(() => {
-      data.originalUserForm = cloneDeep(userForm)
-      data.originalPassForm = cloneDeep(passForm)
+      data.originalUserForm = cloneDeep(data.userForm)
+      data.originalPassForm = cloneDeep(data.passForm)
     })
 
     return {
       ...toRefs(data),
-      userForm,
-      passForm,
       saveUserForm,
       savePassForm,
       cancelPassForm,
