@@ -42,10 +42,10 @@
               </el-form-item>
               <div :class="$style.groupItem">
                 <el-form-item label="Location">
-                  <editable v-model="elevatorForm.location" trigger-event="dbclick" />
+                  <editable v-model="elevatorForm.location" />
                 </el-form-item>
                 <el-form-item label="Floor Served">
-                  <editable v-model="elevatorForm.floor" trigger-event="dbclick" />
+                  <editable v-model="elevatorForm.floor" />
                 </el-form-item>
               </div>
 
@@ -53,7 +53,7 @@
                 <editable v-model="elevatorForm.modal" trigger-event="dbclick" />
               </el-form-item>
               <el-form-item label="Installation Date">
-                <editable v-model="elevatorForm.installation_date" trigger-event="dbclick" />
+                <editable v-model="elevatorForm.installation_date" />
               </el-form-item>
               <el-form-item label="Last Inspection Date">
                 <editable v-model="elevatorForm.inspection_date" trigger-event="dbclick" />
