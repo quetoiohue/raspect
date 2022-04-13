@@ -12,17 +12,16 @@
           </div>
           <template v-if="isDate">
             <div :class="[$style.tableHeaderCell, { [$style.datePeriodCell]: isDate }]">
-              <div v-for="(date, i) in selectedDates" :key="i" :class="$style.headerCellLabel">
-                <strong
-                  v-if="
-                    (selectedDates[i] && selectedDates[i].year) !== (selectedDates[i - 1] && selectedDates[i - 1].year)
-                  "
-                  :class="$style.yearLabel"
-                >
-                  {{ selectedDates[i] && selectedDates[i].year }}
-                </strong>
-                <div>{{ date.month }}</div>
-              </div>
+              <template v-for="(values, key) in selectedDates">
+                <template v-if="key === getMonth() || !showPagination">
+                  <div v-for="(date, idx) in values" :key="idx + date" :class="$style.headerCellLabel">
+                    <strong v-if="!idx" :class="$style.yearLabel">
+                      {{ key }}
+                    </strong>
+                    <div>{{ date }}</div>
+                  </div>
+                </template>
+              </template>
             </div>
           </template>
           <template v-else>
@@ -40,7 +39,7 @@
           <template v-if="isDate">
             <div :class="[$style.tableBodyCell, { [$style.datePeriodCell]: isDate }]">
               <div
-                v-for="id in selectedDates.length"
+                v-for="id in getDateLength() - 1"
                 :key="id"
                 :class="[$style.dateBlock, { [$style.lastBlock]: id === selectedDates.length }]"
               />
@@ -56,6 +55,14 @@
             </div>
           </template>
         </div>
+      </div>
+      <div v-if="showPagination" :class="$style.pagination">
+        <el-button type="text" icon="el-icon-arrow-left" :disabled="pagination.page <= 0" @click="pagination.page--">
+          Previous
+        </el-button>
+        <el-button type="text" :disabled="pagination.limitPage <= pagination.page" @click="pagination.page++">
+          Next <i class="el-icon-arrow-right" />
+        </el-button>
       </div>
     </div>
   </el-card>
@@ -79,60 +86,34 @@ export default {
     const { store, route, next } = useContext()
     const style = useCssModule()
     const vm = getCurrentInstance().proxy
-    const PERIODS = {
-      [NAV_INDEXS.WEEKLY]: [
-        { year: '', month: '22/04' },
-        { year: '', month: '23/04' },
-        { year: '', month: '24/04' },
-        { year: '', month: '25/04' },
-        { year: '', month: '26/04' },
-        { year: '', month: '27/04' },
-        { year: '', month: '28/04' },
-      ],
-      [NAV_INDEXS.MONTHLY]: [
-        { year: '', month: '01/04' },
-        { year: '', month: '08/04' },
-        { year: '', month: '15/04' },
-        { year: '', month: '22/04' },
-      ],
-      [NAV_INDEXS.YEARLY]: [
-        { year: 2021, month: 'Jun' },
-        { year: 2021, month: 'Jul' },
-        { year: 2021, month: 'Aug' },
-        { year: 2021, month: 'Sep' },
-        { year: 2021, month: 'Oct' },
-        { year: 2021, month: 'Nov' },
-        { year: 2021, month: 'Dec' },
-        { year: 2022, month: 'Jan' },
-        { year: 2022, month: 'Feb' },
-        { year: 2022, month: 'Mar' },
-        { year: 2022, month: 'Apr' },
-        { year: 2022, month: 'May' },
-      ],
-      [NAV_INDEXS.DATE]: [
-        { year: 2021, month: 'Jun' },
-        { year: 2021, month: 'Jul' },
-        { year: 2021, month: 'Aug' },
-        { year: 2021, month: 'Sep' },
-        { year: 2021, month: 'Oct' },
-        { year: 2021, month: 'Nov' },
-        { year: 2021, month: 'Dec' },
-        { year: 2022, month: 'Jan' },
-        { year: 2022, month: 'Feb' },
-        { year: 2022, month: 'Mar' },
-        { year: 2022, month: 'Apr' },
-        { year: 2022, month: 'May' },
-      ],
-    }
+
     const data = reactive({
       isDate: computed(() => store.state.menu.currentNav !== NAV_INDEXS.TODAY),
       currentNav: computed(() => store.state.menu.currentNav),
-      selectedDates: computed(() => PERIODS[data.currentNav]),
+      dateRange: computed(() => store.state.menu.dateRange),
+      selectedDates: computed(() => store.getters['menu/selectedDates']),
+      pagination: {
+        page: 0,
+        offset: 31,
+        limitPage: computed(() => Object.keys(data.selectedDates).length - 1),
+      },
+      showPagination: computed(() => store.state.menu.currentNav === NAV_INDEXS.DATE),
     })
 
     const onClickItem = (id) => {
       const path = `${route.value.path}/${id}`
       next(path)
+    }
+
+    const getMonth = () => Object.keys(data.selectedDates)[data.pagination.page]
+
+    const getDateLength = () => {
+      if (data.showPagination) {
+        return data.selectedDates[getMonth()].length
+      }
+      return Object.keys(data.selectedDates).reduce((acc, item) => {
+        return acc + data.selectedDates[item].length
+      }, 0)
     }
 
     watch(
@@ -143,7 +124,7 @@ export default {
 
           setTimeout(() => {
             const $row = vm.$refs.table.querySelector('.' + style.datePeriodCell)
-            const spacing = $row.getBoundingClientRect().width / data.selectedDates.length - 5 + 'px'
+            const spacing = ($row.getBoundingClientRect().width - 5) / getDateLength() + 'px'
 
             document.documentElement.style.setProperty('--elevator-row-spacing', spacing)
           }, 300)
@@ -154,6 +135,8 @@ export default {
     return {
       ...toRefs(data),
       onClickItem,
+      getDateLength,
+      getMonth,
     }
   },
 }
@@ -191,7 +174,7 @@ export default {
       display: grid;
       min-height: 40px;
       grid-template-columns: 150px 150px 250px auto;
-      padding-right: 60px;
+      padding-right: 30px;
     }
     &.datePeriod {
       .tableRow {
@@ -203,6 +186,7 @@ export default {
           display: flex;
           flex-wrap: nowrap;
           align-items: center;
+          margin-right: 5px;
           > .headerCellLabel {
             flex: 1;
             transform: translateX(-50%);
@@ -224,6 +208,7 @@ export default {
           flex-wrap: nowrap;
           position: relative;
           margin-right: var(--elevator-row-spacing);
+          border-right: 1px dashed $color-text;
 
           .dateBlock {
             border-left: 1px dashed $color-text;
@@ -304,6 +289,23 @@ export default {
             margin-left: 15px;
           }
         }
+      }
+    }
+  }
+
+  .pagination {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    button {
+      font-size: $font-size-small;
+      font-weight: $font-weight-primary;
+      &:global(.is-disabled) {
+        opacity: 0.5;
+      }
+      + button {
+        margin-left: 15px;
       }
     }
   }
