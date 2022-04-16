@@ -54,9 +54,7 @@ export default {
       },
     })
 
-    const saveElevatorForm = () => {
-      console.log('🚀 ~ file:', data.originalElevatorForm, data.elevatorForm)
-    }
+    const saveElevatorForm = () => {}
 
     const checkDirty = () => {
       if (!isEqual(data.originalElevatorForm, data.elevatorForm)) {

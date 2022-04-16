@@ -1,9 +1,8 @@
 @import 'normalize';
 @import 'element-ui';
-@import 'base/base', 'base/fonts', 'base/typography', 'base/helpers',
-  'base/print';
+@import 'base/base', 'base/fonts', 'base/typography', 'base/helpers';
 @import 'transitions';
-@import 'components/button', 'components/empty', 'components/table';
+@import 'components/button';
 
 * {
   scroll-behavior: smooth;

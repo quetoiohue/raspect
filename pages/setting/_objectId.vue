@@ -85,7 +85,6 @@ export default {
     vm.$root.$on('changed-data', changedData)
 
     onMounted(() => {
-      console.log('🚀 ~ file: _objectId.vue ~ line 89 ~ onMounted ~ route.value.query', route.value.query)
       data.isSensor = route.value.query.type === 'sensor'
     })
 

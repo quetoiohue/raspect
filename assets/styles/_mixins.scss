@@ -1,7 +1,6 @@
 // -----------------------------------------------------------------------------
 // This file contains all application-wide Sass mixins.
 // -----------------------------------------------------------------------------
-@import 'sizes';
 
 /* RESPOND ABOVE
 -------------------------- */ // @include respond-above(sm) {}
@@ -76,43 +75,6 @@
   }
 }
 
-@mixin defineColorHSL($color-name, $hex) {
-  #{$color-name}: $hex;
-  #{$color-name}-h: #{hue($hex)};
-  #{$color-name}-s: #{saturation($hex)};
-  #{$color-name}-l: #{lightness($hex)};
-}
-
-@function var-lightness($color, $lightnessMultiplier) {
-  $color: str-replace($color, 'var(');
-  $color: str-replace($color, ')');
-  $color: str-replace($color, ',', $end: true);
-  $color-h: var(#{$color + '-h'});
-  $color-s: var(#{$color + '-s'});
-  $color-l: var(#{$color + '-l'});
-  @return hsl($color-h, $color-s, calc(#{$color-l} - #{$lightnessMultiplier}));
-}
-
-@function var-saturation($color, $saturationMultiplier) {
-  $color: str-replace($color, 'var(');
-  $color: str-replace($color, ')');
-  $color: str-replace($color, ',', $end: true);
-  $color-h: var(#{$color + '-h'});
-  $color-s: var(#{$color + '-s'});
-  $color-l: var(#{$color + '-l'});
-  @return hsl($color-h, calc(#{$color-s} - #{$saturationMultiplier}), $color-l);
-}
-
-@function var-alpha($color, $opacity) {
-  $color: str-replace($color, 'var(');
-  $color: str-replace($color, ')');
-  $color: str-replace($color, ',', $end: true);
-  $color-h: var(#{$color + '-h'});
-  $color-s: var(#{$color + '-s'});
-  $color-l: var(#{$color + '-l'});
-  @return hsla($color-h, $color-s, $color-l, $opacity);
-}
-
 @function str-replace($string, $search, $replace: '', $end: false) {
   $index: str-index($string, $search);
   $end-index: 0;
@@ -124,11 +86,7 @@
     }
 
     @return str-slice($string, 1, $index - 1) + $replace +
-      str-replace(
-        str-slice($string, $index + str-length($search)),
-        $search,
-        $replace
-      );
+      str-replace(str-slice($string, $index + str-length($search)), $search, $replace);
   }
   @return $string;
 }
@@ -151,13 +109,7 @@
   }
 }
 
-@mixin font-face(
-  $name,
-  $path,
-  $weight: null,
-  $style: null,
-  $exts: eot woff2 woff ttf svg
-) {
+@mixin font-face($name, $path, $weight: null, $style: null, $exts: eot woff2 woff ttf svg) {
   $src: null;
   $extmods: (
     eot: '?',
@@ -168,17 +120,9 @@
     ttf: 'truetype',
   );
   @each $ext in $exts {
-    $extmod: if(
-      map-has-key($extmods, $ext),
-      $ext + map-get($extmods, $ext),
-      $ext
-    );
+    $extmod: if(map-has-key($extmods, $ext), $ext + map-get($extmods, $ext), $ext);
     $format: if(map-has-key($formats, $ext), map-get($formats, $ext), $ext);
-    $src: append(
-      $src,
-      url(quote($path + '.' + $extmod)) format(quote($format)),
-      comma
-    );
+    $src: append($src, url(quote($path + '.' + $extmod)) format(quote($format)), comma);
   }
   @font-face {
     font-family: quote($name);

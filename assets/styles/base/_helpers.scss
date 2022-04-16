@@ -191,38 +191,6 @@ div:focus {
   border-radius: 10px;
 }
 
-.ol-confirm {
-  border-radius: 10px;
-  padding-bottom: 0;
-  width: 480px;
-  .el-message-box__header {
-    border-bottom: 1px solid $border-color-light;
-    padding: 18px 32px;
-    .el-message-box__title {
-      font-size: $font-size-medium;
-      font-weight: $font-weight-primary;
-      .el-message-box__status {
-        margin-top: 0;
-      }
-    }
-  }
-  .el-message-box__content {
-    padding: 24px 32px;
-  }
-  .el-message-box__btns {
-    border-top: 1px solid $border-color-light;
-    padding: 10px;
-  }
-  .el-button--danger {
-    &:hover,
-    &:focus {
-      background-color: #d54141;
-      color: $color-white;
-      border-color: rgba(0, 0, 0, 0.1);
-    }
-  }
-}
-
 .not-allowed {
   cursor: not-allowed !important;
 }

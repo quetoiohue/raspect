@@ -46,9 +46,7 @@ export default {
       },
     })
 
-    const saveSensorForm = () => {
-      console.log('🚀 ~ file:', data.originalSensorForm, data.sensorForm)
-    }
+    const saveSensorForm = () => {}
 
     const checkDirty = () => {
       if (!isEqual(data.originalSensorForm, data.sensorForm)) {

@@ -153,18 +153,6 @@ html,
     @include iconSize('medium', '36px');
   }
 
-  .el-textarea {
-    &__inner {
-      padding: 5px 10px;
-      resize: none;
-    }
-    .el-input__count {
-      right: 5px;
-      color: #888;
-      background: transparent;
-    }
-  }
-
   .el-select {
     .el-input {
       &__inner {
@@ -415,77 +403,6 @@ html,
     }
   }
 
-  .el-radio {
-    display: inline-flex;
-    line-height: 18px;
-    white-space: normal;
-    &__input {
-      margin-top: 2px;
-      + .el-radio__label {
-        color: $color-text;
-        font-size: 1em;
-        font-weight: normal;
-      }
-      &.is-checked + .el-radio__label {
-        color: $color-text;
-      }
-    }
-    &:focus:not(.is-focus):not(:active):not(.is-disabled) {
-      .el-radio__inner {
-        box-shadow: none;
-      }
-    }
-
-    &-group {
-      &.vertical {
-        display: flex;
-        flex-direction: column;
-        /* stylelint-disable-next-line */
-        .el-radio + .el-radio {
-          margin-top: 10px;
-        }
-      }
-    }
-  }
-
-  .el-tabs {
-    &--button {
-      .el-tabs__nav {
-        display: flex;
-        &-wrap {
-          &::after {
-            height: 0;
-          }
-        }
-      }
-      .el-tabs__item {
-        padding-left: 7px;
-        padding-right: 7px;
-        color: $color-text-primary;
-        border-radius: 4px;
-        /* stylelint-disable-next-line */
-        > span {
-          display: inline-flex;
-          align-items: center;
-        }
-        + .el-tabs__item {
-          margin-left: 8px;
-        }
-        &.is-active,
-        &:hover {
-          background: #f5f5f5;
-          color: #333;
-        }
-        i {
-          display: inline-flex;
-          width: 18px;
-          margin-right: 10px;
-          font-size: $font-size-medium;
-        }
-      }
-    }
-  }
-
   .el-dropdown {
     display: flex;
     justify-content: space-between;
@@ -619,112 +536,11 @@ html,
     }
   }
 
-  .el-table {
-    th,
-    td {
-      padding: 8px 0;
-    }
-    th {
-      > .cell {
-        font-weight: $font-weight-primary;
-        color: $color-text;
-      }
-    }
-    th.is-leaf {
-      border-bottom: none;
-    }
-    td {
-      border-bottom: 1px solid $border-color-light;
-    }
-    .ascending .sort-caret.ascending {
-      border-bottom-color: $color-text;
-    }
-    .descending .sort-caret.descending {
-      border-top-color: $color-text;
-    }
-  }
-
-  .el-tree {
-    &-node__content:hover {
-      background-color: transparent;
-    }
-    &-node:focus > .el-tree-node__content {
-      background-color: transparent;
-    }
-  }
-
   .el-popover {
     word-wrap: break-word;
     word-break: normal;
     @include respond-below(sm) {
       max-width: 98%;
-    }
-  }
-
-  .el-switch {
-    .el-switch__core {
-      border-radius: 1px;
-      width: 38px !important;
-      border: 1px solid $border-color-base;
-      background: #dedede;
-      &::after {
-        border-radius: 1px;
-      }
-    }
-
-    &.is-checked {
-      .el-switch__core {
-        border-color: $color-primary;
-        background-color: $color-primary;
-      }
-      .el-switch__core::after {
-        border-radius: 1px;
-      }
-    }
-  }
-
-  .ol-checkbox-group {
-    display: flex;
-
-    .el-checkbox-button {
-      flex: 1;
-
-      &__inner {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        position: relative;
-        transition: all 0.15s ease;
-        color: unset !important;
-        background: $color-white !important;
-        box-shadow: none !important;
-        border: solid 1px #dedede !important;
-
-        &::after {
-          display: inline-block;
-          position: absolute;
-          font-size: 0.858em;
-          top: 10px;
-          padding: 0;
-          color: $color-primary;
-          font-family: 'icomoon', serif;
-          content: '\e946';
-          opacity: 0;
-          transition: opacity 0.08s ease;
-          left: 50%;
-          transform: translateX(-50%);
-        }
-      }
-
-      &.is-checked {
-        .el-checkbox-button__inner {
-          padding-top: 16px !important;
-
-          &::after {
-            opacity: 1;
-          }
-        }
-      }
     }
   }
 }

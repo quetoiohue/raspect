@@ -153,9 +153,7 @@ export default {
     const zoomIn = () => panzoom.value.zoomIn()
     const zoomOut = () => panzoom.value.zoomOut()
 
-    const saveElevatorForm = () => {
-      console.log('🚀 ~ file: _elevatorId.vue ~ line 107 ~ saveElevatorForm ~ saveElevatorForm', data, elevatorForm)
-    }
+    const saveElevatorForm = () => {}
 
     watch(
       () => isEqual(data.originalElevatorForm, elevatorForm),

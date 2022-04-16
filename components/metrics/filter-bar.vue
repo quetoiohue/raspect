@@ -64,7 +64,6 @@ export default {
     const data = reactive({})
 
     const setFilter = (key, $event) => {
-      console.log('🚀 ~ file: filter-bar.vue ~ line 50 ~ setFilter ~ $event', $event)
       vm.$emit('set-filter', key, $event)
     }
 
