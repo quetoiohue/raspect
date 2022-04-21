@@ -27,6 +27,7 @@ export default defineComponent({
     'base-toolbar': BaseToolbar,
     'base-sidebar': BaseSidebar,
   },
+  middleware: 'authenticated',
   setup() {
     const { route } = useContext()
     const data = reactive({

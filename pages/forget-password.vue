@@ -9,21 +9,39 @@
             <label>Sign In</label>
           </nuxt-link>
         </div>
-        <el-input></el-input>
+        <el-input v-model="login"></el-input>
       </el-form-item>
       <div :class="$style.bottomBtns">
-        <el-button type="danger">Send</el-button>
+        <el-button type="danger" :disabled="loading" :loading="loading" @click="submit">Send</el-button>
       </div>
     </el-form>
   </el-card>
 </template>
 
 <script>
-import { defineComponent } from '@nuxtjs/composition-api'
+import { defineComponent, reactive, toRefs, useContext } from '@nuxtjs/composition-api'
 
 export default defineComponent({
   name: 'IndexPage',
   layout: 'default',
+  setup() {
+    const { store } = useContext()
+    const data = reactive({
+      login: 'andy.yeung@raspect.ai',
+      loading: false,
+    })
+
+    const submit = async () => {
+      data.loading = true
+      await store.dispatch('user/forgotPassword', data.login)
+      data.loading = false
+    }
+
+    return {
+      ...toRefs(data),
+      submit,
+    }
+  },
 })
 </script>
 

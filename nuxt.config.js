@@ -8,6 +8,7 @@ export default {
   // Target: https://go.nuxtjs.dev/config-target
   // target: 'static',
 
+  mode: 'spa',
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
     title: 'raspect',
@@ -24,6 +25,7 @@ export default {
 
   publicRuntimeConfig: {
     GOOGLE_API_KEY: process.env.GOOGLE_API_KEY,
+    BASE_URL: process.env.BASE_URL || 'https://schindler-staging.raspect.ai',
   },
 
   styleResources: {
@@ -34,7 +36,7 @@ export default {
   css: ['@/assets/styles/main.scss'],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: ['@/plugins/element-ui'],
+  plugins: ['@/plugins/element-ui', '@/plugins/api.client.js', '@/plugins/filters'],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
@@ -51,12 +53,18 @@ export default {
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
-    // https://go.nuxtjs.dev/axios
-    '@nuxtjs/axios',
     // https://go.nuxtjs.dev/pwa
     '@nuxtjs/pwa',
     'portal-vue/nuxt',
+    '@nuxtjs/universal-storage',
   ],
+
+  storage: {
+    vuex: false,
+    localStorage: {
+      prefix: '',
+    },
+  },
 
   moment: {
     timezone: true,
@@ -116,12 +124,6 @@ export default {
         ],
       },
     ],
-  },
-
-  // Axios module configuration: https://go.nuxtjs.dev/config-axios
-  axios: {
-    // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
-    baseURL: '/',
   },
 
   // PWA module configuration: https://go.nuxtjs.dev/pwa

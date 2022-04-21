@@ -24,26 +24,24 @@
     >
       <div :class="$style.user">
         <div :class="$style.userInfo">
-          <el-avatar :class="$style.userInfoAvatar" :size="100">A</el-avatar>
+          <el-avatar :class="$style.userInfoAvatar" :size="100">{{ user.userName | leadWord }}</el-avatar>
           <div :class="$style.userInfoText">
-            <div :class="$style.userInfoTextName">Admin CHAN</div>
-            <div>ID: admin_chan@schindler.com</div>
+            <div :class="$style.userInfoTextName">{{ user.userName }}</div>
+            <div>{{ `ID: ${loggedInEmail}` }}</div>
             <nuxt-link to="/profile">
               <el-button @click="closePopup">Edit Profile</el-button>
             </nuxt-link>
           </div>
         </div>
         <div :class="$style.userBottomAction">
-          <nuxt-link to="/login">
-            <el-button type="text">Sign Out</el-button>
-          </nuxt-link>
+          <el-button type="text" @click.prevent="logout">Sign Out</el-button>
         </div>
       </div>
       <div slot="reference" :class="$style.userSettingBtn">
         <span>
-          <el-avatar :class="$style.userSettingAvatar" :size="35">A</el-avatar>
+          <el-avatar :class="$style.userSettingAvatar" :size="35">{{ user.userName | leadWord }}</el-avatar>
         </span>
-        <span>Admin</span>
+        <span>{{ user.lastName }}</span>
         <span><i class="el-icon-caret-bottom"></i> </span>
       </div>
     </el-popover>
@@ -57,7 +55,7 @@ import { useContext } from '@nuxtjs/composition-api'
 export default {
   setup() {
     const vm = getCurrentInstance().proxy
-    const { route } = useContext()
+    const { route, store, $storage, next } = useContext()
     const SHOWED_SEARCH_ROUTES = ['index', 'buildingId']
     const PLACEHOLDERS = {
       index: 'Building Name / Building ID',
@@ -67,13 +65,20 @@ export default {
     const data = reactive({
       showSearchBar: computed(() => SHOWED_SEARCH_ROUTES.includes(route.value.name)),
       placeholder: computed(() => PLACEHOLDERS[route.value.name]),
+      user: computed(() => store.getters['user/loggedInUser'] || {}),
+      loggedInEmail: computed(() => store.getters['user/loggedInEmail']($storage)),
     })
 
     const closePopup = () => vm.$refs.menu && vm.$refs.menu.doClose()
+    const logout = async () => {
+      await store.dispatch('user/logout')
+      await next('/login')
+    }
 
     return {
       ...toRefs(data),
       closePopup,
+      logout,
     }
   },
 }

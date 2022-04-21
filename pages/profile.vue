@@ -6,11 +6,11 @@
       </nuxt-link>
     </portal>
     <div :class="$style.form">
-      <el-avatar :class="$style.formAvatar" :size="120">A</el-avatar>
+      <el-avatar :class="$style.formAvatar" :size="120">{{ user.lastName | leadWord }}</el-avatar>
       <div :class="$style.formInner">
         <el-form label-position="left" label-width="200px">
           <el-form-item label="User Name*">
-            <editable v-model="userForm.username" :is-editing="isEditingUser" />
+            <editable v-model="userForm.userName" :is-editing="isEditingUser" />
           </el-form-item>
           <el-form-item label="User Email*">
             <editable v-model="userForm.email" :is-editing="isEditingUser" />
@@ -23,27 +23,53 @@
             <el-button v-if="isEditingUser === false" :class="$style.editBtn" type="text" @click="isEditingUser = true">
               Edit
             </el-button>
-            <el-button v-else :class="$style.saveBtn" type="danger" @click="saveUserForm">Save</el-button>
+            <el-button
+              v-else
+              :class="$style.saveBtn"
+              type="danger"
+              :loading="loading"
+              :disabled="loading"
+              @click="saveUserForm"
+            >
+              Save
+            </el-button>
           </div>
         </el-form>
 
         <el-form :class="$style.passForm" label-position="left" label-width="200px">
           <p :class="$style.title">Change Password</p>
           <el-form-item label="Old Password">
-            <editable v-model="passForm.oldPassword" :is-editing="isEditingPass" placeholder="input old password" />
+            <editable
+              v-model="passForm.oldPassword"
+              :is-editing="isEditingPass"
+              placeholder="input old password"
+              type="password"
+            />
           </el-form-item>
           <el-form-item label="New password">
-            <editable v-model="passForm.newPassword" :is-editing="isEditingPass" placeholder="input new password" />
+            <editable
+              v-model="passForm.newPassword"
+              :is-editing="isEditingPass"
+              placeholder="input new password"
+              type="password"
+            />
           </el-form-item>
           <el-form-item label="Confirm New Password">
-            <editable v-model="passForm.confirmPassword" :is-editing="isEditingPass" placeholder="input new password" />
+            <editable
+              v-model="passForm.confirmPassword"
+              :is-editing="isEditingPass"
+              placeholder="input new password"
+              type="password"
+            />
           </el-form-item>
 
           <div :class="$style.bottomBtns">
             <el-button v-if="isEditingPass === true" :class="$style.editBtn" type="text" @click="cancelPassForm">
               Cancel
             </el-button>
-            <el-button :class="$style.saveBtn" type="danger" @click="savePassForm">Change Password</el-button>
+            <el-button :class="$style.saveBtn" type="danger" :disabled="loading" @click="savePassForm">
+              Change Password
+            </el-button>
           </div>
         </el-form>
       </div>
@@ -54,7 +80,8 @@
 <script>
 import isEqual from 'lodash/isEqual'
 import cloneDeep from 'lodash/cloneDeep'
-import { getCurrentInstance, onMounted, reactive, toRefs, watch } from '@vue/composition-api'
+import { computed, getCurrentInstance, onMounted, reactive, toRefs, watch } from '@vue/composition-api'
+import { useContext } from '@nuxtjs/composition-api'
 
 export default {
   beforeRouteLeave(to, from, next) {
@@ -67,33 +94,59 @@ export default {
   layout: 'base',
   setup() {
     const vm = getCurrentInstance().proxy
+    const { store, $storage } = useContext()
     const data = reactive({
       isEditingUser: false,
       isEditingPass: false,
       originalUserForm: null,
       originalPassForm: null,
       isChangedData: false,
+      loading: false,
+      user: computed(() => store.getters['user/loggedInUser'] || {}),
+      loggedInEmail: computed(() => store.getters['user/loggedInEmail']($storage)),
       passForm: {
         oldPassword: '',
         newPassword: '',
         confirmPassword: '',
       },
       userForm: {
-        username: 'Quang Tran',
+        userName: 'Quang Tran',
         email: 'admin@gmail.com',
         tel: '123-123-123',
       },
     })
 
-    const saveUserForm = () => {
+    const saveUserForm = async () => {
+      if (data.loading) return
+      data.loading = true
+      const { userName, tel, email } = data.userForm
+      const names = userName?.split(' ')
+      const reqData = {
+        firstName: names.slice(0, 1).join(''),
+        lastName: names.slice(1).join(' '),
+        login: email,
+        tel,
+      }
+      await store.dispatch('user/updateProfile', { userId: data.user.userId, reqData })
+      initialProfilers()
+      data.loading = false
       data.isEditingUser = false
     }
 
-    const savePassForm = () => {
+    const savePassForm = async () => {
       if (data.isEditingPass === false) {
         return (data.isEditingPass = true)
       }
 
+      if (data.loading) return
+      data.loading = true
+      const { oldPassword, newPassword } = data.passForm
+      const reqData = {
+        oldPassword,
+        newPassword,
+      }
+      await store.dispatch('user/changePassword', { userId: data.user.userId, reqData })
+      data.loading = false
       data.isEditingPass = false
     }
 
@@ -108,6 +161,15 @@ export default {
       }
     }
 
+    const initialProfilers = () => {
+      const _userInfo = {
+        userName: data.user.firstName + ' ' + data.user.lastName,
+        email: data.loggedInEmail,
+        tel: data.user.tel,
+      }
+      data.userForm = Object.assign({}, data.userForm, _userInfo)
+    }
+
     watch(
       () => [isEqual(data.originalUserForm, data.userForm), isEqual(data.originalPassForm, data.passForm)],
       ([a, b]) => {
@@ -116,6 +178,7 @@ export default {
     )
 
     onMounted(() => {
+      initialProfilers()
       data.originalUserForm = cloneDeep(data.userForm)
       data.originalPassForm = cloneDeep(data.passForm)
     })

@@ -139,3 +139,10 @@ export const STATUS_OPTIONS = [
     label: 'Normal Status',
   },
 ]
+
+export const LOCAL_STORAGE = Object.freeze({
+  AUTH_TOKEN: 'authToken',
+  REFRESH_TOKEN: 'refreshToken',
+  LOGGED_IN: 'loggedIn',
+  USER_ID: 'userId',
+})

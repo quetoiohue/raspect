@@ -1,7 +1,7 @@
 <template>
   <div class="el-input" @click="onDbClick">
     <input
-      type="text"
+      v-bind="$attrs"
       autocomplete="off"
       class="el-input__inner"
       :value="value"

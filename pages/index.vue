@@ -1,17 +1,21 @@
 <template>
   <div :class="$style.container">
     <portal to="right-toolbar">
-      <div :class="$style.welcomeTitle">Welcome Back <span>Admin CHAN</span></div>
+      <div :class="$style.welcomeTitle">
+        Welcome Back <span>{{ userName }}</span>
+      </div>
     </portal>
-    <div :class="$style.title">All Buildings (1)</div>
+    <div :class="$style.title">{{ `All Buildings (${list.length})` }}</div>
     <div :class="$style.list">
-      <nuxt-link to="/1">
+      <nuxt-link v-for="(building, index) in list" :key="index" :to="`/${building._id}`">
         <el-card :body-style="{ padding: '0px' }" :class="$style.listItem">
           <img src="~/static/building.svg" class="image" />
           <div :class="$style.metas">
-            <strong>International Commerce Centre</strong>
+            <strong>{{ building.name }}</strong>
             <p :class="$style.address">1 Autsin Road West, West Kowloon</p>
-            <p :class="$style.author">Created by <span>Admin Chan</span> on <span>1 Jan 2021</span></p>
+            <p :class="$style.author">
+              Created by <span>{{ building.clientName }}</span> on <span>{{ building.startDate | dateFormat }}</span>
+            </p>
           </div>
         </el-card>
       </nuxt-link>
@@ -20,10 +24,29 @@
 </template>
 
 <script>
-import { defineComponent } from '@nuxtjs/composition-api'
+import { computed, defineComponent, onMounted, reactive, toRefs, useContext } from '@nuxtjs/composition-api'
 
 export default defineComponent({
   layout: 'base',
+  setup() {
+    const { store } = useContext()
+    const data = reactive({
+      corporateId: computed(() => store.getters['user/getCorporateId']),
+      userName: computed(() => store.getters['user/loggedInUser']?.userName),
+      list: computed(() => store.state.building.list),
+    })
+
+    onMounted(async () => {
+      await store.dispatch('building/getBuildingList', {
+        corporateId: data.corporateId,
+        projectTypes: 'Monitoring.Elevator',
+      })
+    })
+
+    return {
+      ...toRefs(data),
+    }
+  },
 })
 </script>
 
